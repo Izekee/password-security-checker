@@ -43,7 +43,6 @@ The program checks whether the password matches a small list of commonly used pa
 
 The program detects patterns such as:
 
-```text
 aaa
 111
 !!!
