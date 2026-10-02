@@ -93,35 +93,32 @@ Learning Objectives
 
 This project was created to practice:
 
-Python variables
-Functions
-Conditional statements
-Loops
-Sets
-String methods
-The string module
-Boolean logic
-Basic cybersecurity concepts
-Command-line applications
+- Python variables
+- Functions
+- Conditional statements
+- Loops
+- Sets
+- String methods
+- The string module
+- Boolean logic
+- Basic cybersecurity concepts
+- Command-line applications
 
 Limitations
 
-This project is an educational password checker.
-
-It does not guarantee that a password is secure or impossible to crack.
-
-The password strength calculation is based on simple rules rather than real-world password cracking data.
-
-The common-password list is also intentionally small because this is a beginner project.
+- This project is an educational password checker.
+- It does not guarantee that a password is secure or impossible to crack.
+- The password strength calculation is based on simple rules rather than real-world password cracking data.
+- The common-password list is also intentionally small because this is a beginner project.
 
 Future Improvements
 
 Possible future improvements include:
 
-Larger common-password database
-Detection of more predictable patterns
-Improved password-strength estimation
-Better command-line interface
-Unit tests
-Graphical user interface
-Web-based version with client-side processing
+- Larger common-password database
+- Detection of more predictable patterns
+- Improved password-strength estimation
+- Better command-line interface
+- Unit tests
+- Graphical user interface
+- Web-based version with client-side processing
