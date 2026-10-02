@@ -43,16 +43,16 @@ The program checks whether the password matches a small list of commonly used pa
 
 The program detects patterns such as:
 
-aaa
-111
-!!!
+- aaa
+- 111
+- !!!
 
 The program checks for simple sequences such as:
 
-1234
-abcd
-qwer
-asdf
+- 1234
+- abcd
+- qwer
+- asdf
 
 Security Recommendations
 
