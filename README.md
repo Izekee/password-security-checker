@@ -91,6 +91,19 @@ The program analyzes the password and displays its security characteristics and 
 
 Learning Objectives
 
+This project helped me practice:
+
+- Python programming
+- JavaScript programming
+- HTML and CSS
+- Regular expressions
+- Conditional logic
+- Password-security concepts
+- Git and GitHub
+- Version control
+- Web deployment
+- Client-side security considerations
+
 This project was created to practice:
 
 - Python variables
@@ -119,6 +132,23 @@ Possible future improvements include:
 - Detection of more predictable patterns
 - Improved password-strength estimation
 - Better command-line interface
-- Unit tests
-- Graphical user interface
+- More detailed educational explanations
+- Additional cybersecurity checks
 - Web-based version with client-side processing
+
+Live Demo
+
+Try the web application:  
+https://password-security-checker-web.vercel.app/
+
+Deployment
+
+The web application is deployed using Vercel.
+
+The project repository is hosted on GitHub, and the web directory is used as the deployment root.
+
+Author
+
+Izekee
+
+I built this as part of my cybersecurity learning journey. I'm a 2nd year Cybersecurity Student at Koladaisi .
