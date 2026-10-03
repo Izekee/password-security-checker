@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Password Security Checker</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header class="navbar">
+        <div class="logo">
+            🔐 Password Security Checker
+        </div>
+
+        <div class="badge">
+            🛡️ Security Tool
+        </div>
+    </header>
+
+
+    <main class="container">
+
+        <!-- HERO SECTION -->
+        <section class="hero">
+
+            <p class="eyebrow">CYBERSECURITY PROJECT</p>
+
+            <h1>
+                Check Your Password
+                <span>Security</span>
+            </h1>
+
+            <p class="hero-text">
+                Analyze password strength, detect common patterns,
+                and get security recommendations instantly.
+            </p>
+
+        </section>
+
+
+        <!-- PASSWORD INPUT CARD -->
+        <section class="checker-card">
+
+            <div class="card-header">
+                <div>
+                    <h2>🔑 Password Analysis</h2>
+                    <p>Enter a password to analyze its security.</p>
+                </div>
+            </div>
+
+
+            <div class="input-container">
+
+                <label for="password">
+                    Password
+                </label>
+
+                <div class="password-wrapper">
+
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Enter a password..."
+                        autocomplete="off"
+                    >
+
+                    <button
+                        type="button"
+                        id="togglePassword"
+                        class="toggle-button"
+                    >
+                        👁️
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <button
+                id="analyzeButton"
+                class="analyze-button"
+            >
+                Analyze Password
+            </button>
+
+
+            <p class="privacy-note">
+                🔒 Your password is analyzed locally in your browser
+                and is not sent to a server.
+            </p>
+
+        </section>
+
+
+        <!-- RESULTS SECTION -->
+        <section
+            id="results"
+            class="results-section hidden"
+        >
+
+            <!-- SCORE -->
+            <div class="score-card">
+
+                <div class="score-circle">
+
+                    <span id="score">
+                        0
+                    </span>
+
+                    <small>/5</small>
+
+                </div>
+
+                <div class="score-info">
+
+                    <p class="result-label">
+                        SECURITY SCORE
+                    </p>
+
+                    <h2 id="strength">
+                        -
+                    </h2>
+
+                    <p id="strengthDescription">
+                        -
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- SECURITY CHECKS -->
+            <div class="section-title">
+
+                <h2>Security Checks</h2>
+
+                <p>
+                    Here's what we found about your password.
+                </p>
+
+            </div>
+
+
+            <div class="checks-grid">
+
+                <div class="check-card" id="lengthCheck">
+                    <div class="check-icon">❌</div>
+
+                    <div>
+                        <h3>Password Length</h3>
+                        <p id="lengthText">
+                            -
+                        </p>
+                    </div>
+                </div>
+
+
+                <div class="check-card" id="uppercaseCheck">
+                    <div class="check-icon">❌</div>
+
+                    <div>
+                        <h3>Uppercase Letter</h3>
+                        <p id="uppercaseText">
+                            -
+                        </p>
+                    </div>
+                </div>
+
+
+                <div class="check-card" id="lowercaseCheck">
+                    <div class="check-icon">❌</div>
+
+                    <div>
+                        <h3>Lowercase Letter</h3>
+                        <p id="lowercaseText">
+                            -
+                        </p>
+                    </div>
+                </div>
+
+
+                <div class="check-card" id="numberCheck">
+                    <div class="check-icon">❌</div>
+
+                    <div>
+                        <h3>Number</h3>
+                        <p id="numberText">
+                            -
+                        </p>
+                    </div>
+                </div>
+
+
+                <div class="check-card" id="specialCheck">
+                    <div class="check-icon">❌</div>
+
+                    <div>
+                        <h3>Special Character</h3>
+                        <p id="specialText">
+                            -
+                        </p>
+                    </div>
+                </div>
+
+
+                <div class="check-card" id="commonCheck">
+                    <div class="check-icon">❌</div>
+
+                    <div>
+                        <h3>Common Password</h3>
+                        <p id="commonText">
+                            -
+                        </p>
+                    </div>
+                </div>
+
+
+                <div class="check-card" id="repeatCheck">
+                    <div class="check-icon">❌</div>
+
+                    <div>
+                        <h3>Repeated Characters</h3>
+                        <p id="repeatText">
+                            -
+                        </p>
+                    </div>
+                </div>
+
+
+                <div class="check-card" id="sequenceCheck">
+                    <div class="check-icon">❌</div>
+
+                    <div>
+                        <h3>Simple Sequence</h3>
+                        <p id="sequenceText">
+                            -
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- RECOMMENDATIONS -->
+            <div class="recommendations">
+
+                <div class="section-title">
+
+                    <h2>💡 Security Recommendations</h2>
+
+                    <p>
+                        Improve your password security with these suggestions.
+                    </p>
+
+                </div>
+
+                <ul id="recommendationsList">
+                </ul>
+
+            </div>
+
+
+            <!-- DISCLAIMER -->
+            <div class="disclaimer">
+
+                <strong>⚠️ Educational Tool</strong>
+
+                <p>
+                    This project is designed for cybersecurity education.
+                    It does not guarantee that a password is completely secure.
+                    Never use real passwords when testing security tools.
+                </p>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <footer>
+
+        <p>
+            Built as a cybersecurity learning project 🔐
+        </p>
+
+        <p>
+            Password Security Checker
+        </p>
+
+    </footer>
+
+
+    <script src="script.js"></script>
+
+</body>
+</html>
