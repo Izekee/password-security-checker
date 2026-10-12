@@ -1,4 +1,8 @@
+import hashlib
 import string
+from getpass import getpass
+
+import requests
 
 
 # Common passwords that are easy to guess
@@ -59,6 +63,36 @@ def check_sequences(password):
             return True
 
     return False
+
+
+def check_breached(password):
+    """Return how many times the password appears in known data breaches.
+
+    Uses the Have I Been Pwned "Pwned Passwords" API with k-anonymity:
+    only the first 5 characters of the password's SHA-1 hash are sent.
+    The password itself never leaves this computer.
+
+    Returns None if the check could not be completed (offline, API down).
+    """
+    sha1 = hashlib.sha1(password.encode("utf-8")).hexdigest().upper()
+    prefix, suffix = sha1[:5], sha1[5:]
+
+    try:
+        response = requests.get(
+            f"https://api.pwnedpasswords.com/range/{prefix}",
+            headers={"Add-Padding": "true"},
+            timeout=5,
+        )
+        response.raise_for_status()
+    except requests.RequestException:
+        return None
+
+    for line in response.text.splitlines():
+        hash_suffix, count = line.split(":")
+        if hash_suffix == suffix:
+            return int(count)
+
+    return 0
 
 
 def check_password(password):
@@ -186,8 +220,8 @@ print("Educational cybersecurity tool")
 print("Use fake/test passwords only.")
 print("=" * 55)
 
-# Get password from user
-password = input("\nEnter a test password: ")
+# Get password from user (typing is hidden on screen)
+password = getpass("\nEnter a test password: ")
 
 # Check for empty input
 if not password:
@@ -209,6 +243,23 @@ else:
         number_check,
         special_check,
     ) = check_password(password)
+
+    # ==========================================
+    # BREACH CHECK (Have I Been Pwned)
+    # ==========================================
+
+    breach_count = None
+
+    # Skip the network call if it's already a known common password
+    if not common_password:
+        print("\nChecking breach database...")
+        breach_count = check_breached(password)
+
+    if breach_count:
+        strength = "VERY WEAK"
+        feedback.append(
+            f"This password appeared in {breach_count:,} known data breaches."
+        )
 
     # ==========================================
     # RESULTS
@@ -252,6 +303,16 @@ else:
         print("Simple sequence:     YES")
     else:
         print("Simple sequence:     NO")
+
+    # Breach database check
+    if common_password:
+        print("Breach database:     SKIPPED (already a common password)")
+    elif breach_count is None:
+        print("Breach database:     COULD NOT CHECK (offline?)")
+    elif breach_count > 0:
+        print(f"Breach database:     FOUND ({breach_count:,} times)")
+    else:
+        print("Breach database:     NOT FOUND")
 
     # ==========================================
     # RECOMMENDATIONS

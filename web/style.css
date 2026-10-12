@@ -588,3 +588,11 @@ footer p:first-child {
     }
 
 }
+
+/* =========================
+   BREACH CHECK CARD
+========================= */
+
+.check-card.full-width {
+    grid-column: 1 / -1;
+}

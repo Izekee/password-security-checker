@@ -90,8 +90,9 @@
 
 
             <p class="privacy-note">
-                🔒 Your password is analyzed locally in your browser
-                and is not sent to a server.
+                🔒 Your password is analyzed in your browser. For the breach
+                check, only the first 5 characters of its SHA-1 hash are sent
+                to Have I Been Pwned. Your password is never sent.
             </p>
 
         </section>
@@ -239,6 +240,18 @@
                     <div>
                         <h3>Simple Sequence</h3>
                         <p id="sequenceText">
+                            -
+                        </p>
+                    </div>
+                </div>
+
+
+                <div class="check-card full-width" id="breachCheck">
+                    <div class="check-icon">❌</div>
+
+                    <div>
+                        <h3>Data Breach Check</h3>
+                        <p id="breachText">
                             -
                         </p>
                     </div>

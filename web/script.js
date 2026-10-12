@@ -155,10 +155,148 @@ function updateCheck(id, passed, text) {
 
 
 /* =========================
+   SHA-1 HASH (for breach check)
+========================= */
+
+async function sha1Hex(text) {
+
+    const data = new TextEncoder().encode(text);
+
+    const hashBuffer = await crypto.subtle.digest("SHA-1", data);
+
+    return Array.from(new Uint8Array(hashBuffer))
+        .map(function (byte) {
+            return byte.toString(16).padStart(2, "0");
+        })
+        .join("")
+        .toUpperCase();
+
+}
+
+
+/* =========================
+   BREACH CHECK (Have I Been Pwned)
+
+   Only the first 5 characters of the SHA-1 hash are sent.
+   Returns: number of times found (0 = not found),
+            or null if the check could not be completed.
+========================= */
+
+async function checkBreached(password) {
+
+    // crypto.subtle only exists on localhost or https pages
+    if (!window.crypto || !window.crypto.subtle) {
+
+        return null;
+
+    }
+
+    try {
+
+        const hash = await sha1Hex(password);
+
+        const prefix = hash.slice(0, 5);
+        const suffix = hash.slice(5);
+
+        const controller = new AbortController();
+
+        const timer = setTimeout(function () {
+            controller.abort();
+        }, 6000);
+
+        const response = await fetch(
+            "https://api.pwnedpasswords.com/range/" + prefix,
+            { signal: controller.signal }
+        );
+
+        clearTimeout(timer);
+
+        if (!response.ok) {
+
+            return null;
+
+        }
+
+        const text = await response.text();
+
+        for (const line of text.split("\n")) {
+
+            const parts = line.trim().split(":");
+
+            if (parts[0] === suffix) {
+
+                return parseInt(parts[1], 10);
+
+            }
+
+        }
+
+        return 0;
+
+    } catch (error) {
+
+        return null;   // offline, blocked, timed out, etc.
+
+    }
+
+}
+
+
+/* =========================
+   UPDATE BREACH CARD
+========================= */
+
+function updateBreachCheck(breachCount, skipped) {
+
+    const card = document.getElementById("breachCheck");
+
+    const icon = card.querySelector(".check-icon");
+
+    const paragraph = document.getElementById("breachText");
+
+    if (skipped) {
+
+        icon.textContent = "⏭️";
+        card.style.borderColor = "#e5e7eb";
+        icon.style.background = "#f9fafb";
+        paragraph.textContent =
+            "Skipped, because this is already a known common password.";
+
+    } else if (breachCount === null) {
+
+        icon.textContent = "⚠️";
+        card.style.borderColor = "#fde68a";
+        icon.style.background = "#fffbeb";
+        paragraph.textContent =
+            "Could not check right now (offline or service unavailable).";
+
+    } else if (breachCount > 0) {
+
+        icon.textContent = "❌";
+        card.style.borderColor = "#fecaca";
+        icon.style.background = "#fef2f2";
+        paragraph.textContent =
+            "Found in " + breachCount.toLocaleString() +
+            " known data breaches.";
+
+    } else {
+
+        icon.textContent = "✅";
+        card.style.borderColor = "#bbf7d0";
+        icon.style.background = "#f0fdf4";
+        paragraph.textContent =
+            "Not found in the known breach database.";
+
+    }
+
+}
+
+
+/* =========================
    ANALYZE PASSWORD
 ========================= */
 
-function analyzePassword() {
+async function analyzePassword() {
 
     const password = passwordInput.value;
 
@@ -193,6 +331,28 @@ function analyzePassword() {
 
     const sequenceFound =
         checkSequences(password);
+
+
+    /* =========================
+       BREACH CHECK
+    ========================= */
+
+    let breachCount = null;
+
+    // No need to call the API for passwords already on the common list
+    if (commonPassed) {
+
+        analyzeButton.disabled = true;
+        analyzeButton.textContent = "Checking...";
+
+        breachCount = await checkBreached(password);
+
+        analyzeButton.disabled = false;
+        analyzeButton.textContent = "Analyze Password";
+
+    }
+
+    const breached = breachCount !== null && breachCount > 0;
 
 
     /* =========================
@@ -237,6 +397,17 @@ function analyzePassword() {
 
         description =
             "This password is commonly used and should be avoided.";
+
+    }
+
+    else if (breached) {
+
+        strength = "VERY WEAK";
+
+        description =
+            "This password appeared in " +
+            breachCount.toLocaleString() +
+            " known data breaches, so attackers already have it.";
 
     }
 
@@ -365,6 +536,9 @@ function analyzePassword() {
     );
 
 
+    updateBreachCheck(breachCount, !commonPassed);
+
+
     /* =========================
        RECOMMENDATIONS
     ========================= */
@@ -445,6 +619,15 @@ function analyzePassword() {
 
         recommendations.push(
             "Avoid simple sequences such as 1234, abcd, or qwerty."
+        );
+
+    }
+
+
+    if (breached) {
+
+        recommendations.push(
+            "This password has appeared in data breaches. Do not use it, even though it may look strong."
         );
 
     }
